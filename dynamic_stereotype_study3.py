@@ -382,7 +382,7 @@ def study3(
                 num_agent_per_policy[i] = len([agent for agent in agent_list if agent.policy==i]) 
             print('Number of agents in each subgroup:', num_agent_per_policy)   
 
-            # Save group-level data
+            # Save data
             utils.save_data(
                 path_group_data, 
                 study_number,
