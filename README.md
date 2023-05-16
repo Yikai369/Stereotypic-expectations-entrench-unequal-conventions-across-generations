@@ -1,2 +1,2 @@
-# Stereotypic expectations entrench unequal conventions across generations in deep multi-agent reinforcement learning
+# Stereotypic Expectations Entrench Unequal Conventions Across Generations in Deep Multi-agent Reinforcement Learning
 
