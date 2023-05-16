@@ -8,6 +8,7 @@ import utils
 
 import study2_config
 
+
 def study2(
         dir_group_data='save/'
         ):
