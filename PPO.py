@@ -1,20 +1,28 @@
+"""
+An implementation of the Proximal Policy Gradient (PPO) algorithm. 
+
+Adapted from the Github Repository: 
+Minimal PyTorch Implementation of Proximal Policy Optimization
+https://github.com/nikhilbarhate99/PPO-PyTorch
+"""
+
 import torch
 import torch.nn as nn
 from torch.distributions import Categorical
 
-# Memory class 
+# Memory 
 class RolloutBuffer:
     def __init__(self):
+        """Initialize the memory buffer."""
         self.actions = []
         self.states = []
         self.logprobs = []
         self.rewards = []
         self.is_terminals = []
-        self.n_sell = [0,0]
-        self.n_buy = [0,0]
         self.day_rewards = []
 
     def clear(self):
+        """Clear the stored memories."""
         del self.actions[:]
         del self.states[:]
         del self.logprobs[:]
@@ -22,7 +30,7 @@ class RolloutBuffer:
         del self.is_terminals[:]
 
 
-# class Network 
+# Actor-critic network 
 class ActorCritic(nn.Module):
     def __init__(self, state_dim, action_dim):
         super(ActorCritic, self).__init__()
@@ -57,6 +65,7 @@ class ActorCritic(nn.Module):
         raise NotImplementedError
     
     def act(self, state):
+        """Takes an action with the input state."""
         action_probs = self.actor(state)
         dist = Categorical(action_probs)
 
@@ -66,7 +75,7 @@ class ActorCritic(nn.Module):
         return action.detach(), action_logprob.detach()
     
     def evaluate(self, state, action):
-
+        """Evaluate the specified action and state."""
         action_probs = self.actor(state)
         dist = Categorical(action_probs)
         action_logprobs = dist.log_prob(action)
@@ -76,41 +85,30 @@ class ActorCritic(nn.Module):
         return action_logprobs, state_values, dist_entropy
 
 
-# Class Model  
+# PPO  
 class PPO:
     def __init__(self, device, state_dim, action_dim, lr_actor, lr_critic, gamma, K_epochs, eps_clip):
-
         self.device = device 
         self.gamma = gamma
         self.eps_clip = eps_clip
         self.K_epochs = K_epochs
-        
-        # self.buffer = RolloutBuffer()
-
         self.model1 = ActorCritic(state_dim, action_dim).to(self.device)
         self.optimizer = torch.optim.Adam([
                         {'params': self.model1.actor.parameters(), 'lr': lr_actor},
                         {'params': self.model1.critic.parameters(), 'lr': lr_critic}
                     ])
-
-        # self.policy_old = ActorCritic(state_dim, action_dim).to(self.device)
-        # self.policy_old.load_state_dict(self.model1.state_dict())
-        
         self.loss_fn = nn.MSELoss()
 
     def take_action(self, state):
+        """Choose an action based on the observed state."""
         with torch.no_grad():
             state = state.to(self.device)
-            # action, action_logprob = self.policy_old.act(state)
             action, action_logprob = self.model1.act(state)
-
-        # buffer.states.append(state)
-        # buffer.actions.append(action)
-        # buffer.logprobs.append(action_logprob)
 
         return action, action_logprob
 
     def training(self, buffer, entropy_coefficient=0.01):
+        """Train the model with the memories stored in the buffer."""
         # Monte Carlo estimate of returns
         rewards = []
         discounted_reward = 0
@@ -126,12 +124,8 @@ class PPO:
 
         # convert list to tensor
         old_states = torch.squeeze(torch.stack(buffer.states, dim=0)).detach().to(self.device)
-        # print('state:', old_states.shape)
         old_actions = torch.squeeze(torch.stack(buffer.actions, dim=0)).detach().to(self.device)
-        # print('state:', old_actions.shape)
         old_logprobs = torch.squeeze(torch.stack(buffer.logprobs, dim=0)).detach().to(self.device)
-        # print('state:', old_logprobs.shape)
-
 
         # Optimize policy for K epochs
         for _ in range(self.K_epochs):
@@ -153,30 +147,20 @@ class PPO:
 
             # final loss of clipped objective PPO 
             critic_loss = self.loss_fn(state_values, rewards)
-            # print('c_loss:', critic_loss)
             policy_loss = -torch.min(surr1, surr2) 
-            # print('p-loss', dist_entropy.shape)
             loss = policy_loss + 0.5*critic_loss - entropy_coefficient * dist_entropy
-            # loss = policy_loss + 0.5*critic_loss
 
             # take gradient step
             self.optimizer.zero_grad()
             loss.mean().backward()
             self.optimizer.step()
-            
-        # Copy new weights into old policy
-        # self.policy_old.load_state_dict(self.model1.state_dict())
-
-        # clear buffer
-        # self.buffer.clear()
 
         return loss.mean() 
     
     def save(self, checkpoint_path):
-        # torch.save(self.policy_old.state_dict(), checkpoint_path)
+        """Save the current model."""
         torch.save(self.model1.state_dict(), checkpoint_path)
-
    
     def load(self, checkpoint_path):
-        # self.policy_old.load_state_dict(torch.load(checkpoint_path, map_location=lambda storage, loc: storage))
+        """Load the specified model."""
         self.model1.load_state_dict(torch.load(checkpoint_path, map_location=lambda storage, loc: storage))
