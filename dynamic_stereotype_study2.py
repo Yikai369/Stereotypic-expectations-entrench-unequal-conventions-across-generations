@@ -277,7 +277,7 @@ def study2(
                                     for _ in range(num_subgroups)] 
                 interaction_record = [0,0,0,0,0,0,0,0] 
                 
-            # Save 
+            # Save data
             utils.save_data(
                 path_group_data, 
                 study_number,
