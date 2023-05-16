@@ -1,0 +1,11 @@
+study_number = 3  
+num_epoch = 200
+num_run = 30
+max_turns = 50
+population_size = 300
+prop = 0.5
+prop_reverse = 0.75 - prop
+replace_prop = 0.2
+num_subgroups = 9 
+unit_test_frequency = 1 
+n_unseen_agents = 120
