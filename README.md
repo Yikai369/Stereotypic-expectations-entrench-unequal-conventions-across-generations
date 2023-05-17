@@ -1,6 +1,6 @@
 # Stereotypic Expectations Entrench Unequal Conventions Across Generations in Deep Multi-agent Reinforcement Learning
 
-Rebekah A. Gelp´ı, Yikai Tang, Ethan C. Jacksona and William A. Cunningham
+Rebekah A. Gelpí, Yikai Tang, Ethan C. Jacksona and William A. Cunningham
 
 ## Instructions
 
