@@ -393,7 +393,9 @@ def study3(
                 total_normalized_reward_sum, 
                 policy_normalized_reward_sum, 
                 decider_reward_sum, 
-                interaction_record_sum)
+                interaction_record_sum,
+                iteration
+            )
 
 
 if __name__ == '__main__': 
