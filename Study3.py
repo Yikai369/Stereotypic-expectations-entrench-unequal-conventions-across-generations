@@ -2,6 +2,7 @@
 import random
 import torch
 import pandas as pd
+import numpy as np
 
 from env import AIEcon_simple_game, generate_input
 from PPO import RolloutBuffer, PPO
@@ -11,8 +12,8 @@ import study3_config
 
 
 def study3(
-        dir_unit_test='save/', 
-        dir_group_data='save/'
+        dir_unit_test='./save/', 
+        dir_group_data='./save/'
         ):
     # Set directories
     path_unit_test = dir_unit_test
@@ -108,6 +109,8 @@ def study3(
                                 for _ in range(num_subgroups)] 
         interaction_record = [0,0,0,0,0,0,0,0] 
 
+        actions = np.zeros((env.action_space + 4, num_agents, num_epoch * (int(1/replace_prop)+2)), dtype = object)
+
         # Training loop for each iteration of replacement 
         for iteration in range(int(1/replace_prop)+1+1): 
 
@@ -148,6 +151,13 @@ def study3(
                     if agent_list[agent].policy in [2,5,8]:
                         agent_list[agent].coin = 6
 
+                print(f'Epoch: {epoch}. Num_epoch: {num_epoch}. Iteration: {iteration}')
+                print(epoch + num_epoch * (iteration))
+                actions[7, :, epoch + num_epoch*(iteration)] = np.array([''.join([str(x) for x in agent.appearance]) for agent in agent_list], dtype=str)
+                actions[8, :, epoch + num_epoch*(iteration)] = np.array([agent.agent_type for agent in agent_list])
+                actions[9, :, epoch + num_epoch*(iteration)] = np.array([epoch for i in range(num_agents)])
+                actions[10, :, epoch + num_epoch*(iteration)] = np.array([iteration for i in range(num_agents)])
+
                 # Loop for each epoch  
                 turn = 0
                 while done != 1:
@@ -167,6 +177,8 @@ def study3(
                             )
                         state = state.unsqueeze(0).to(device)
                         action, action_logprob = models[agent].take_action(state)
+
+                        actions[action, agent, epoch + num_epoch*(iteration)] += 1
 
                         # The market decider makes a prediction when an agent chooses selling
                         pred_success = True
@@ -396,6 +408,12 @@ def study3(
                 interaction_record_sum,
                 iteration
             )
+
+        actions = actions.reshape(env.action_space + 4, -1).T
+
+        actions_out = pd.DataFrame(actions)
+
+        actions_out.to_csv(f'{dir_group_data}test_{run}.csv', sep = ',', header=['collect_wood', 'collect_stone', 'build', 'sell_wood', 'sell_stone', 'buy_wood', 'buy_stone', 'agent_id', 'subgroup', 'epoch', 'iteration'])
 
 
 if __name__ == '__main__': 

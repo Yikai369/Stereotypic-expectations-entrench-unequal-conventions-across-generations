@@ -1,6 +1,6 @@
 study_number = 3  
 num_epoch = 200
-num_run = 30
+num_run = 5
 max_turns = 50
 population_size = 300
 prop = 0.5
