@@ -247,7 +247,8 @@ def replace_agents_equal_ratio(
 
 def create_models(
         num_model, 
-        device
+        device,
+        is_a2c=False
         ):
     """Create models for agents."""
     models = deque(maxlen=num_model)
@@ -261,7 +262,8 @@ def create_models(
                 lr_critic=0.0005,
                 gamma=0.9,
                 K_epochs=10,
-                eps_clip=0.2 
+                eps_clip=0.2,
+                is_a2c=is_a2c 
             )
         ) 
     # convert to device
@@ -368,30 +370,30 @@ def save_data(
     suffix = f'_{iteration}' if iteration is not None else '' 
     np.savetxt(save_dir+f"study{study_prefix}_{population_size}_{prop}_{run}"+suffix+"_agent1_actions.csv", 
                 np.array(all_agent_actions_sum[0]), delimiter=',', fmt='%s')
-    np.savetxt(save_dir+f"study{study_prefix}_{population_size}_{prop}_{run}"+suffix+"__agent2_actions.csv", 
+    np.savetxt(save_dir+f"study{study_prefix}_{population_size}_{prop}_{run}"+suffix+"_agent2_actions.csv", 
                 np.array(all_agent_actions_sum[1]), delimiter=',', fmt='%s')
-    np.savetxt(save_dir+f"study{study_prefix}_{population_size}_{prop}_{run}"+suffix+"__agent3_actions.csv",
+    np.savetxt(save_dir+f"study{study_prefix}_{population_size}_{prop}_{run}"+suffix+"_agent3_actions.csv",
                 np.array(all_agent_actions_sum[2]), delimiter=',', fmt='%s')
-    np.savetxt(save_dir+f"study{study_prefix}_{population_size}_{prop}_{run}"+suffix+"__agent4_actions.csv", 
+    np.savetxt(save_dir+f"study{study_prefix}_{population_size}_{prop}_{run}"+suffix+"_agent4_actions.csv", 
                 np.array(all_agent_actions_sum[3]), delimiter=',', fmt='%s')
-    np.savetxt(save_dir+f"study{study_prefix}_{population_size}_{prop}_{run}"+suffix+"__agent5_actions.csv", 
+    np.savetxt(save_dir+f"study{study_prefix}_{population_size}_{prop}_{run}"+suffix+"_agent5_actions.csv", 
                 np.array(all_agent_actions_sum[4]), delimiter=',', fmt='%s')
-    np.savetxt(save_dir+f"study{study_prefix}_{population_size}_{prop}_{run}"+suffix+"__agent6_actions.csv", 
+    np.savetxt(save_dir+f"study{study_prefix}_{population_size}_{prop}_{run}"+suffix+"_agent6_actions.csv", 
                 np.array(all_agent_actions_sum[5]), delimiter=',', fmt='%s')
-    np.savetxt(save_dir+f"study{study_prefix}_{population_size}_{prop}_{run}"+suffix+"__agent7_actions.csv", 
+    np.savetxt(save_dir+f"study{study_prefix}_{population_size}_{prop}_{run}"+suffix+"_agent7_actions.csv", 
                 np.array(all_agent_actions_sum[6]), delimiter=',', fmt='%s')
-    np.savetxt(save_dir+f"study{study_prefix}_{population_size}_{prop}_{run}"+suffix+"__agent8_actions.csv", 
+    np.savetxt(save_dir+f"study{study_prefix}_{population_size}_{prop}_{run}"+suffix+"_agent8_actions.csv", 
                 np.array(all_agent_actions_sum[7]), delimiter=',', fmt='%s')
-    np.savetxt(save_dir+f"study{study_prefix}_{population_size}_{prop}_{run}"+suffix+"__agent9_actions.csv", 
+    np.savetxt(save_dir+f"study{study_prefix}_{population_size}_{prop}_{run}"+suffix+"_agent9_actions.csv", 
                 np.array(all_agent_actions_sum[8]), delimiter=',', fmt='%s')
 
-    np.savetxt(save_dir+f"study{study_prefix}_{population_size}_{prop}_{run}"+suffix+"__total_normalized_agent_rewards.csv", 
+    np.savetxt(save_dir+f"study{study_prefix}_{population_size}_{prop}_{run}"+suffix+"_total_normalized_agent_rewards.csv", 
                 np.array(total_normalized_reward_sum),  delimiter=',', fmt='%s') 
-    np.savetxt(save_dir+f"study{study_prefix}_{population_size}_{prop}_{run}"+suffix+"__policy_normalized_agent_rewards.csv", 
+    np.savetxt(save_dir+f"study{study_prefix}_{population_size}_{prop}_{run}"+suffix+"_policy_normalized_agent_rewards.csv", 
                 np.array(policy_normalized_reward_sum), delimiter=',', fmt='%s')
-    np.savetxt(save_dir+f"study{study_prefix}_{population_size}_{prop}_{run}"+suffix+"__decider_rewards.csv", 
+    np.savetxt(save_dir+f"study{study_prefix}_{population_size}_{prop}_{run}"+suffix+"_decider_rewards.csv", 
                 np.array(decider_reward_sum), delimiter=',', fmt='%s')
-    np.savetxt(save_dir+f"study{study_prefix}_{population_size}_{prop}_{run}"+suffix+"__interaction_record.csv", 
+    np.savetxt(save_dir+f"study{study_prefix}_{population_size}_{prop}_{run}"+suffix+"_interaction_record.csv", 
                 np.array(interaction_record_sum), delimiter=',', fmt='%s')
     
 

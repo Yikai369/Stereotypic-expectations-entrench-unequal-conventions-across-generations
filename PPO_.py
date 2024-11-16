@@ -87,14 +87,11 @@ class ActorCritic(nn.Module):
 
 # PPO  
 class PPO:
-    def __init__(self, device, state_dim, action_dim, lr_actor, lr_critic, gamma, K_epochs, eps_clip, is_a2c=False):
+    def __init__(self, device, state_dim, action_dim, lr_actor, lr_critic, gamma, K_epochs, eps_clip):
         self.device = device 
-        self.is_a2c = is_a2c
         self.gamma = gamma
         self.eps_clip = eps_clip
         self.K_epochs = K_epochs
-        if self.is_a2c:
-            self.K_epochs = 1
         self.model1 = ActorCritic(state_dim, action_dim).to(self.device)
         self.optimizer = torch.optim.Adam([
                         {'params': self.model1.actor.parameters(), 'lr': lr_actor},
@@ -150,11 +147,7 @@ class PPO:
 
             # final loss of clipped objective PPO 
             critic_loss = self.loss_fn(state_values, rewards)
-            if self.is_a2c:
-                action_probs = torch.exp(self.model1.evaluate(old_states, old_actions)[0])
-                policy_loss = -action_probs * advantages 
-            else:
-                policy_loss = -torch.min(surr1, surr2) 
+            policy_loss = -torch.min(surr1, surr2) 
             loss = policy_loss + 0.5*critic_loss - entropy_coefficient * dist_entropy
 
             # take gradient step

@@ -10,7 +10,7 @@ import study2_config
 
 
 def study2(
-        dir_group_data='save/'
+        dir_group_data='save_extended/extended_2000epoch_'
         ):
     # Set directories
     path_group_data = dir_group_data
@@ -28,7 +28,8 @@ def study2(
     prop_reverse = study2_config.prop_reverse
     num_subgroups = study2_config.num_subgroups 
     n_unseen_agents = study2_config.n_unseen_agents 
-        
+    is_a2c = study2_config.is_a2c
+
     # Main loop
     for run in range(num_run):  
         for population_size in population_sizes:
@@ -49,7 +50,8 @@ def study2(
                         lr_critic=0.0005,
                         gamma=0.9,
                         K_epochs=10,
-                        eps_clip=0.2 
+                        eps_clip=0.2, 
+                        is_a2c=is_a2c
                     )
             decider_model.model1.to(device)
 
@@ -59,7 +61,8 @@ def study2(
             # Create models for the agents 
             models = utils.create_models(
                 population_size, 
-                device
+                device,
+                is_a2c=is_a2c
                 )
 
             # Initialize the game environment 

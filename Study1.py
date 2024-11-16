@@ -10,7 +10,7 @@ import study1_config
 
 
 def study1(
-        dir_group_data='save/'
+        dir_group_data='save_extended/extended_2000epoch_'
         ):
     # set directory
     path_group_data = dir_group_data
@@ -28,6 +28,7 @@ def study1(
     prop_reverse = study1_config.prop_reverse
     num_subgroups = study1_config.num_subgroups 
     n_unseen_agents = study1_config.n_unseen_agents 
+    is_a2c = study1_config.is_a2c
 
     # Main loop
     for run in range(num_run):
@@ -49,7 +50,8 @@ def study1(
                         lr_critic=0.0005,
                         gamma=0.9,
                         K_epochs=10,
-                        eps_clip=0.2 
+                        eps_clip=0.2, 
+                        is_a2c=is_a2c 
                     )
             decider_model.model1.to(device)
 
@@ -57,7 +59,7 @@ def study1(
             decider_model.replay = RolloutBuffer()
 
             # Create models for the agents 
-            models = utils.create_models(population_size, device)
+            models = utils.create_models(population_size, device, is_a2c=is_a2c)
 
             # Initialize the game environment 
             env = AIEcon_simple_game()
@@ -164,7 +166,7 @@ def study1(
                             # A slight punishment to the market if the agent lacks resources
                             if decider_action == agent_action and not_suf:
                                 decider_reward = -.3
-
+    
                             # Record the history of the interactions between the agents and the market
                             if decider_action == 0:
                                 if agent_list[agent].policy == 0: 

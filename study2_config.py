@@ -1,5 +1,5 @@
 study_number = 2 
-num_epoch = 200
+num_epoch = 2000
 num_run = 30
 max_turns = 50
 population_sizes = [30, 100, 300, 600]
@@ -7,3 +7,4 @@ prop = 0.5
 prop_reverse = 0.75-prop
 num_subgroups = 9 # In total 3 groups, each has 3 subgroups 
 n_unseen_agents = None 
+is_a2c = True
