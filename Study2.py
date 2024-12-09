@@ -10,7 +10,7 @@ import study2_config
 
 
 def study2(
-        dir_group_data='save/'
+        dir_group_data='save/study2/'
         ):
     # Set directories
     path_group_data = dir_group_data
@@ -28,7 +28,10 @@ def study2(
     prop_reverse = study2_config.prop_reverse
     num_subgroups = study2_config.num_subgroups 
     n_unseen_agents = study2_config.n_unseen_agents 
-        
+    strong_skill = study2_config.strong_skill
+    weak_skill = study2_config.weak_skill
+    print(strong_skill, weak_skill)
+
     # Main loop
     for run in range(num_run):  
         for population_size in population_sizes:
@@ -78,7 +81,9 @@ def study2(
                 population_size, 
                 agent_distribution, 
                 original_agents_attributes, 
-                study_number
+                study_number,
+                strong_skill,
+                weak_skill,
                 )
             num_agents = len(agent_list)
             print('Total number of agents:', num_agents)

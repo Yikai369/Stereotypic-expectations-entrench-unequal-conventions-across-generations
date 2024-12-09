@@ -58,7 +58,9 @@ def create_agents(
         population_size, 
         agent_distribution, 
         original_agents_attributes, 
-        study_number
+        study_number,
+        strong_skill=0.95,
+        weak_skill=0.15
         ):
     """Create agents of three groups (wood, stone, house), each consisting of 
     three subgroups (chopping, mining, building specialists).
@@ -85,12 +87,12 @@ def create_agents(
                     group_id = [] 
                 # Chopping specialists
                 if agent_subtype == 0:
-                    list_subtype_agent = [Agent(0,0,group_id+original_agents_attributes[count+i], .95, .15, .05)
+                    list_subtype_agent = [Agent(0,0,group_id+original_agents_attributes[count+i], strong_skill, weak_skill, .05)
                                           for i in range(agent_distribution['wood'][0])]
                     count += agent_distribution['wood'][0]
                 # Mining specialists
                 elif agent_subtype == 1:
-                    list_subtype_agent = [Agent(1,1,group_id+original_agents_attributes[count+i], .15, .95, .05)
+                    list_subtype_agent = [Agent(1,1,group_id+original_agents_attributes[count+i], weak_skill, strong_skill, .05)
                                           for i in range(agent_distribution['wood'][1])]
                     count += agent_distribution['wood'][1]
                 # Building specialists
@@ -107,12 +109,12 @@ def create_agents(
                     group_id = []
                 # Chopping specialists
                 if agent_subtype == 0:
-                    list_subtype_agent = [Agent(3,3,group_id+original_agents_attributes[count+i], .95, .15, .05)
+                    list_subtype_agent = [Agent(3,3,group_id+original_agents_attributes[count+i], strong_skill, weak_skill, .05)
                                           for i in range(agent_distribution['stone'][0])]
                     count += agent_distribution['stone'][0]
                 # Mining specialists 
                 elif agent_subtype == 1:
-                    list_subtype_agent = [Agent(4,4,group_id+original_agents_attributes[count+i], .15, .95, .05)
+                    list_subtype_agent = [Agent(4,4,group_id+original_agents_attributes[count+i], weak_skill, strong_skill, .05)
                                           for i in range(agent_distribution['stone'][1])]
                     count += agent_distribution['stone'][1]
                 # Building specialists
@@ -128,12 +130,12 @@ def create_agents(
                     group_id = []
                 # Chopping specialists
                 if agent_subtype == 0:
-                    list_subtype_agent = [Agent(6,6,group_id+original_agents_attributes[count+i], .95, .15, .05)
+                    list_subtype_agent = [Agent(6,6,group_id+original_agents_attributes[count+i], strong_skill, weak_skill, .05)
                                           for i in range(agent_distribution['house'][0])]
                     count += agent_distribution['house'][0]
                 # Mining specialists
                 elif agent_subtype == 1:
-                    list_subtype_agent = [Agent(7,7,group_id+original_agents_attributes[count+i], .15, .95, .05)
+                    list_subtype_agent = [Agent(7,7,group_id+original_agents_attributes[count+i], weak_skill, strong_skill, .05)
                                           for i in range(agent_distribution['house'][1])]
                     count += agent_distribution['house'][1]
                 # Building specialists
@@ -366,7 +368,7 @@ def save_data(
             towards agents during transactions. 
     """
     suffix = f'_{iteration}' if iteration is not None else '' 
-    np.savetxt(save_dir+f"study{study_prefix}_{population_size}_{prop}_{run}"+suffix+"_agent1_actions.csv", 
+    np.savetxt(save_dir+f"study{study_prefix}_{population_size}_{prop}_{run}"+suffix+"__agent1_actions.csv", 
                 np.array(all_agent_actions_sum[0]), delimiter=',', fmt='%s')
     np.savetxt(save_dir+f"study{study_prefix}_{population_size}_{prop}_{run}"+suffix+"__agent2_actions.csv", 
                 np.array(all_agent_actions_sum[1]), delimiter=',', fmt='%s')
