@@ -19,7 +19,6 @@ class RolloutBuffer:
         self.logprobs = []
         self.rewards = []
         self.is_terminals = []
-        self.day_rewards = []
 
     def clear(self):
         """Clear the stored memories."""
