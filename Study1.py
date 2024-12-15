@@ -10,7 +10,7 @@ import study1_config
 
 
 def study1(
-        dir_group_data='save/study1/'
+        dir_group_data='save/study1_/skill_0.25_'
         ):
     # set directory
     path_group_data = dir_group_data

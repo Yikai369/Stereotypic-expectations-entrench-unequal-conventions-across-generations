@@ -8,4 +8,4 @@ prop_reverse = 0.75-prop
 num_subgroups = 9 # In total 3 groups, each has 3 subgroups 
 n_unseen_agents = None 
 strong_skill = 0.95 
-weak_skill = 0.05
+weak_skill = 0.25
